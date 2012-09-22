@@ -2,12 +2,14 @@ from neo4jrestclient.client import GraphDatabase
 from pyquery import PyQuery as pq
 from lict_common import pubmed_ids
 import logging
+import extract_ci
 
 NEO4J_URL="http://localhost:7474/db/data/"
 DESIRED_ARTICLE_TYPE="research-article"
 
 gdb = GraphDatabase(NEO4J_URL)
-one_index_to_rule_them_all = gdb.nodes.indexes.create("one_index_to_rule_them_all")
+article_index = gdb.nodes.indexes.create("article_index")
+conflict_entity_index = gdb.nodes.indexes.create("conflict_entity_index")
 
 
 def import_stuff(file_list):
@@ -25,7 +27,6 @@ def import_stuff(file_list):
         except Exception as e:
             # When in doubt, wrap it all in a massive try/except for bonus insanity!
             logging.error(e)
-        
 
 def save_article_to_neo4j(article_doc):
     # Which key? PMC
@@ -33,16 +34,21 @@ def save_article_to_neo4j(article_doc):
     pmc_str = str(pmc)
     pmid_str = str(pmid)
     try:
-        node = one_index_to_rule_them_all.get('pmc', pmc_str)[0]
+        node = article_index.get('pmc', pmc_str)[0]
     except IndexError:
         node = gdb.node()
 
+    node['type'] = 'article'
     node['pmc'] = pmc
     node['pmid'] = pmid
     node['title'] = article_doc('article-title').text()
+    conflict_raw = extract_ci.ci_info_list(article_doc)
+    if conflict_raw:
+        logging.debug("Found conflict text for %d" % pmc)
+        node['conflict_raw'] = ' '.join(conflict_raw)
 
-    one_index_to_rule_them_all.add('pmc', pmc_str, node)
-    one_index_to_rule_them_all.add('pmid', pmid_str, node)
+    article_index.add('pmc', pmc_str, node)
+    article_index.add('pmid', pmid_str, node)
 
 if __name__ == "__main__":
     import sys

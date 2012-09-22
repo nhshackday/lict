@@ -1,6 +1,6 @@
 import csv, urllib,urllib2
 import lxml.html
-import sys
+import os, sys
 
 params = {"EntrezSystem2.PEntrez.Pubmed.Pubmed_SearchBar.SearchResourceList":"pubmed",
 "EntrezSystem2.PEntrez.Pubmed.Pubmed_SearchBar.Term":"womble",
@@ -98,10 +98,16 @@ if __name__ == '__main__':
     if len(sys.argv) != 2:
         print "Need the input CSV as a param"
         sys.exit(0)
+    # No buffering thanks
+    sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
     print 'Loading %s' % sys.argv[1]
     reader = csv.reader(open(sys.argv[1]))
     for row in reader:
         id = row[0]
+        if  not id or os.path.exists("data/%s.medline" % id):
+            print 'Skipping ID %s\r' %  id,
+            continue
+        print 'Loading ID %s\r' %  id,
         data = fetch_id(id)
         page = lxml.html.fromstring(data)
         content = page.cssselect('pre')[0].text_content()
