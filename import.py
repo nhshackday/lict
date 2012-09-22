@@ -2,6 +2,7 @@ from neo4jrestclient.client import GraphDatabase
 from pyquery import PyQuery as pq
 from lict_common import pubmed_ids
 import logging
+import extract_ci
 
 NEO4J_URL="http://localhost:7474/db/data/"
 DESIRED_ARTICLE_TYPE="research-article"
@@ -40,6 +41,10 @@ def save_article_to_neo4j(article_doc):
     node['pmc'] = pmc
     node['pmid'] = pmid
     node['title'] = article_doc('article-title').text()
+    conflict_raw = extract_ci.ci_info_list(article_doc)
+    if conflict_raw:
+        logging.debug("Found conflict text for %d" % pmc)
+        node['conflict_raw'] = ' '.join(conflict_raw)
 
     one_index_to_rule_them_all.add('pmc', pmc_str, node)
     one_index_to_rule_them_all.add('pmid', pmid_str, node)
