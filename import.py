@@ -25,7 +25,6 @@ def import_stuff(file_list):
         except Exception as e:
             # When in doubt, wrap it all in a massive try/except for bonus insanity!
             logging.error(e)
-        
 
 def save_article_to_neo4j(article_doc):
     # Which key? PMC

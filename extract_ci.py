@@ -14,8 +14,8 @@ def ci_info_list(doc):
     ci_info += [' '.join(p.itertext()) for p in doc('p') if pq(p)('bold') and pq(p)('bold').text().encode('utf-8').strip().lower() in  COMPETING_INTEREST_TITLES]
     return ci_info
 
-def competing_interest_declarations():
-    for filename, doc in filter_by_article_type("research-article", xmldocs_in_dir(NXMLDIR)):
+def competing_interest_declarations(directory):
+    for filename, doc in filter_by_article_type("research-article", xmldocs_in_dir(directory)):
         try:
             pmid, pmc = pubmed_ids(doc)
             ci_info = ci_info_list(doc)
@@ -27,7 +27,7 @@ def competing_interest_declarations():
             print "error with file %s: %s" % (filename, str(e))
 
 if __name__ == "__main__":
-    for ids, ci_info in competing_interest_declarations():
+    for ids, ci_info in competing_interest_declarations(NXMLDIR):
         print "%s, %s:" % ids
         for ci_str in ci_info:
             print "    %s" % ci_str
