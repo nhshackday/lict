@@ -8,5 +8,6 @@ setup(
         'neo4jrestclient',
         'nltk',
         'requests',
+        'ffs',
     ],
 )
