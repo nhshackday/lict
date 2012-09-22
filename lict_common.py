@@ -21,8 +21,16 @@ def filter_by_article_type(atype, docs):
             yield filename, doc
 
 def pubmed_ids(doc):
+    pmc = None
+    pmid = None
 
-    pmc = int(doc('article-id[pub-id-type="pmc"]').text())
-    pmid = int(doc('article-id[pub-id-type="pmid"]').text())
+    try:
+        pmc = int(doc('article-id[pub-id-type="pmc"]').text())
+    except:
+        pass
+    try:
+        pmid = int(doc('article-id[pub-id-type="pmid"]').text())
+    except:
+        pass
     return pmid,pmc
 
