@@ -38,6 +38,7 @@ def save_article_to_neo4j(article_doc):
     except IndexError:
         node = gdb.node()
 
+    node['type'] = 'article'
     node['pmc'] = pmc
     node['pmid'] = pmid
     node['title'] = article_doc('article-title').text()
