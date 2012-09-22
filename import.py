@@ -6,8 +6,7 @@ NEO4J_URL="http://localhost:7474/db/data/"
 DESIRED_ARTICLE_TYPE="research-article"
 
 gdb = GraphDatabase(NEO4J_URL)
-article_pmc_index = gdb.nodes.indexes.create("article_pmc_index")
-article_pmid_index = gdb.nodes.indexes.create("article_pmid_index")
+one_index_to_rule_them_all = gdb.nodes.indexes.create("one_index_to_rule_them_all")
 
 
 def import_stuff(file_list):
@@ -31,7 +30,19 @@ def import_stuff(file_list):
         
 
 def save_article_to_neo4j(article):
-    pass
+    # Which key? PMC
+    pmc_str = str(article.pmc)
+    pmid_str = str(article.pmid)
+    try:
+        node = one_index_to_rule_them_all.get('pmc', pmc_str)[0]
+    except IndexError:
+        node = gdb.node()
+
+    node['pmc'] = article.pmc
+    node['pmid'] = article.pmid
+
+    one_index_to_rule_them_all.add('pmc', pmc_str, node)
+    one_index_to_rule_them_all.add('pmid', pmid_str, node)
 
 class Article(object):
     def __init__(self, pmc, pmid):
