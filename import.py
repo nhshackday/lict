@@ -1,45 +1,48 @@
 from neo4jrestclient.client import GraphDatabase
 from pyquery import PyQuery as pq
+from lict_common import pubmed_ids
 import logging
 
 NEO4J_URL="http://localhost:7474/db/data/"
 DESIRED_ARTICLE_TYPE="research-article"
 
 gdb = GraphDatabase(NEO4J_URL)
-article_pmc_index = gdb.nodes.indexes.create("article_pmc_index")
-article_pmid_index = gdb.nodes.indexes.create("article_pmid_index")
+one_index_to_rule_them_all = gdb.nodes.indexes.create("one_index_to_rule_them_all")
 
 
 def import_stuff(file_list):
     for filename in file_list:
-        doc = pq(filename=filename)
+        article_doc = pq(filename=filename)
         try:
-            article_tag = doc('article')
+            article_tag = article_doc('article')
             article_type = article_tag.attr('article-type')
             if article_type != DESIRED_ARTICLE_TYPE:
                 logging.debug("Skipping article of type %s" % article_type)
                 continue
-            pmc = int(doc('article-id[pub-id-type="pmc"]').text())
-            pmid = int(doc('article-id[pub-id-type="pmid"]').text())
+            (pmid, pmc) = pubmed_ids(article_doc)
             logging.info("Processing article %d / %d" % (pmc, pmid))
-            article = Article(pmc, pmid)
-            article.from_pyquery_doc(doc)
-            save_article_to_neo4j(article)
+            save_article_to_neo4j(article_doc)
         except Exception as e:
             # When in doubt, wrap it all in a massive try/except for bonus insanity!
-            print e
+            logging.error(e)
         
 
-def save_article_to_neo4j(article):
-    pass
+def save_article_to_neo4j(article_doc):
+    # Which key? PMC
+    (pmid, pmc) = pubmed_ids(article_doc)
+    pmc_str = str(pmc)
+    pmid_str = str(pmid)
+    try:
+        node = one_index_to_rule_them_all.get('pmc', pmc_str)[0]
+    except IndexError:
+        node = gdb.node()
 
-class Article(object):
-    def __init__(self, pmc, pmid):
-        self.pmc = pmc
-        self.pmid = pmid
+    node['pmc'] = pmc
+    node['pmid'] = pmid
+    node['title'] = article_doc('article-title').text()
 
-    def from_pyquery_doc(self, doc):
-        pass
+    one_index_to_rule_them_all.add('pmc', pmc_str, node)
+    one_index_to_rule_them_all.add('pmid', pmid_str, node)
 
 if __name__ == "__main__":
     import sys
