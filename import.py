@@ -3,13 +3,14 @@ from pyquery import PyQuery as pq
 from lict_common import pubmed_ids
 import logging
 import extract_ci
+import nltk_hackery
 
 NEO4J_URL="http://localhost:7474/db/data/"
 DESIRED_ARTICLE_TYPE="research-article"
 
 gdb = GraphDatabase(NEO4J_URL)
 article_index = gdb.nodes.indexes.create("article_index")
-conflict_entity_index = gdb.nodes.indexes.create("conflict_entity_index")
+organisation_index = gdb.nodes.indexes.create("organisation_index")
 
 
 def import_stuff(file_list):
@@ -22,7 +23,7 @@ def import_stuff(file_list):
                 logging.debug("Skipping article of type %s" % article_type)
                 continue
             (pmid, pmc) = pubmed_ids(article_doc)
-            logging.info("Processing article %d / %d" % (pmc, pmid))
+            logging.info("Processing article %s / %s" % (pmc, pmid))
             save_article_to_neo4j(article_doc)
         except Exception as e:
             # When in doubt, wrap it all in a massive try/except for bonus insanity!
@@ -46,9 +47,25 @@ def save_article_to_neo4j(article_doc):
     if conflict_raw:
         logging.debug("Found conflict text for %d" % pmc)
         node['conflict_raw'] = ' '.join(conflict_raw)
+        handle_conflicts(node)
 
     article_index.add('pmc', pmc_str, node)
     article_index.add('pmid', pmid_str, node)
+
+def handle_conflicts(node):
+    conflict_raw = node['conflict_raw']
+    organisations = nltk_hackery.extract_orgs(conflict_raw)
+
+    for organisation in organisations:
+        try:
+            org_node = organisation_index.get('name', organisation)[0]
+        except IndexError:
+            org_node = gdb.node()
+        org_node['type'] = 'organisation'
+        org_node['name'] = organisations
+        organisation_index.add('name', organisation, org_node)
+
+        # Relation-up
 
 if __name__ == "__main__":
     import sys
