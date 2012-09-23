@@ -6,7 +6,7 @@ from django.views.generic.list import ListView
 from conflict.models import Organisation, Article, Conflict
 
 def home(request):
-    return HttpResponse("Hi!")
+    return render(request, "conflict/home.html")
 
 class OrganisationListView(ListView):
     model = Organisation
