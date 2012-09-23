@@ -1,0 +1,22 @@
+
+mkdir pubmed-scrape
+cd pubmed-scrape
+wget http://pmc.jensenlab.org/pmcid
+
+grep nxml pmcid |sed 's/.*href="//;s/".*//;s/^/http:\/\/pmc.jensenlab.org\/pmcid\//' > xml-urls
+for i in `seq -w 0 99`; do grep "$i\\.nxml" xml-urls > xml-urls-$i; done
+mkdir xml
+pushd xml
+killall -9 xargs; killall wget
+for i in ../xml-urls-*; do (num=${i#../xml-urls-}; mkdir -p $num && cd $num && xargs wget -qc < <((cat ../$i ; ls |sed 's,^,http://pmc.jensenlab.org/pmcid/,')|sort|uniq -u) )& done
+popd
+
+grep tar.gz pmcid |sed 's/.*href="//;s/".*//;s/^/http:\/\/pmc.jensenlab.org\/pmcid\//' > targz-urls
+for i in `seq -w 0 99`; do grep "$i\\.tar\\.gz" targz-urls > targz-urls-$i; done
+mkdir targz
+pushd targz
+killall -9 xargs; killall wget
+for i in ../targz-urls-*; do (num=${i#../targz-urls-}; mkdir -p $num && cd $num && xargs wget -qc < <((cat ../$i ; ls |sed 's,^,http://pmc.jensenlab.org/pmcid/,')|sort|uniq -u) )& done
+popd
+popd
+
