@@ -1,0 +1,13 @@
+{% extends "conflict/base.html" %}
+
+{% block content %}
+    <section class="container">
+        <table>
+            {% for organisation in organisation_list %}
+                <tr>
+                    <td>{{ organisation.name }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </section>
+{% endblock %}

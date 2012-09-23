@@ -1,0 +1,14 @@
+Django==1.4.1
+PyYAML==3.10
+cssselect==0.7.1
+dj-database-url==0.2.1
+httplib2==0.7.6
+lucene-querybuilder==0.1.5
+lxml==3.0alpha2
+neo4jrestclient==1.7.0
+nltk==2.0.2
+numpy==1.6.2
+psycopg2==2.4.5
+pyquery==1.2.1
+requests==0.14.0
+wsgiref==0.1.2
