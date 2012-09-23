@@ -9,5 +9,6 @@ setup(
         'nltk',
         'requests',
         'numpy',
+        'django',
     ],
 )
