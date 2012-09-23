@@ -1,13 +1,19 @@
 import nltk
 
-DATA_FILE='/opt/nhshackday/je4d/nhshackday/pmcid/competing-interest-statements-stripped'
+DATA_FILE='/mnt/nhshackday/je4d/pubmed-scrape/xml/00/*'
 
-def load_data(filename):
+def load_data(pathspec):
+    import extract_ci
+    from pyquery import PyQuery as pq
+    import glob
     data = []
-    with open(filename) as f:
-        for line in f.readlines():
-            bits = line.split(':')
-            data += [{'filename': bits[0], 'text': bits[1]}]
+
+    file_list = glob.glob(pathspec)[:50]
+    for filename in file_list:
+        with open(filename) as f:
+            article_doc = pq(filename=filename)
+            text = ' '.join(extract_ci.ci_info_list(article_doc))
+            data += [{'filename': filename, 'text': text}]
 
     return data
 
