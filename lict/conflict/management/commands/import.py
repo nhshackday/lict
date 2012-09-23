@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 from django.core.management.base import BaseCommand
-from conflict.models import Article
+from conflict.models import Article, Organisation, Conflict
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
@@ -27,15 +27,18 @@ class Command(BaseCommand):
                 article.title = article_doc('article-title').text()[:200]
                 article.save()
 
-                if False:
-                    conflict_raw = extract_ci.ci_info_list(article_doc)
-                    if conflict_raw:
-                        logging.debug("Found conflict text for %d" % pmc)
-                        node['conflict_raw'] = ' '.join(conflict_raw)
-                        handle_conflicts(node)
+                conflict_raw = extract_ci.ci_info_list(article_doc)
+                if conflict_raw:
+                    article.raw_conflict_text = ' '.join(conflict_raw)
+                    logging.info("Found conflict text for %d: %s" % (pmc, article.raw_conflict_text))
+                    organisation_names = nltk_hackery.extract_orgs(article.raw_conflict_text)
 
-                    article_index.add('pmc', pmc_str, node)
-                    article_index.add('pmid', pmid_str, node)
+                    for organisation_name in organisation_names:
+                        (organisation, organisation_created) = Organisation.objects.get_or_create(name=organisation_name)
+                        if organisation_created:
+                            logging.info("Created organisation %s" % organisation_name)
+                        (conflict, _) = Conflict.objects.get_or_create(article=article, organisation=organisation)
+
             except AssertionError as e:
                 # When in doubt, wrap it all in a massive try/except for bonus insanity!
                 logging.error(e)
@@ -48,8 +51,7 @@ class Command(BaseCommand):
 from pyquery import PyQuery as pq
 from lict.lib.lict_common import pubmed_ids
 import logging
-import lict.lib.extract_ci
-import lict.lib.nltk_hackery
+from lict.lib import extract_ci, nltk_hackery
 
 DESIRED_ARTICLE_TYPE="research-article"
 
@@ -92,17 +94,5 @@ def save_article_to_neo4j(article_doc):
     article_index.add('pmc', pmc_str, node)
     article_index.add('pmid', pmid_str, node)
 
-def handle_conflicts(node):
-    conflict_raw = node['conflict_raw']
-    organisations = nltk_hackery.extract_orgs(conflict_raw)
 
-    for organisation in organisations:
-        org_node = organisation_index.get('name', organisation)[0]
-        org_node['type'] = 'organisation'
-        org_node['name'] = organisations
-        organisation_index.add('name', organisation, org_node)
-
-        # Relation-up
-        rel = node.relationships.create('conflicts', org_node)
-        rel['source'] = conflict_raw
 

@@ -2,21 +2,19 @@
 
 {% block content %}
     <section class="container">
-        <h2>Articles</h2>
+        <h2>Conflicts</h2>
         <table class="table">
             <thead>
                 <tr>
-                    <th>PMC</th>
-                    <th>PMID</th>
-                    <th>Title</th>
+                    <th>Article</th>
+                    <th>Organisation</th>
                 </tr>
             </thead>
             <tbody>
-                {% for article in article_list %}
+                {% for conflict in conflict_list %}
                     <tr>
-                        <td>{{ article.pmc }}</td>
-                        <td>{{ article.pmid }}</td>
-                        <td>{{ article.title }}</td>
+                        <td>{{ conflict.article.title }}</td>
+                        <td>{{ conflict.organisation.name }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
