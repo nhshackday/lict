@@ -103,7 +103,7 @@ if __name__ == '__main__':
         sys.exit(0)
     # No buffering thanks
     sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
-    print 'Loading %s\n' % sys.argv[1]
+    print 'Loading %s\r' % sys.argv[1]
     reader = csv.reader(open(sys.argv[1]))
     for row in reader:
         id = row[0]
@@ -112,9 +112,9 @@ if __name__ == '__main__':
                 or os.path.exists(os.path.join(data_dir, "data/done/%s.medline" % id))
                 or os.path.exists(os.path.join(data_dir, "data/done/%s/%s.medline" % (id_dir, id)))
                 or os.path.exists(os.path.join(data_dir, "data/todo/%s/%s.medline" % (id_dir, id)))):
-            print 'Skipping ID %s\n' %  id,
+            print 'Skipping ID %s\r' %  id,
             continue
-        print 'Loading ID %s\n' %  id,
+        print 'Loading ID %s\r' %  id,
         data = None
         try:
             data = fetch_id(id)
