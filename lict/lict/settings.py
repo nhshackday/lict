@@ -1,6 +1,9 @@
 # Django settings for lict project.
 
-DEBUG = True
+import os
+PROJECT_DIR = os.path.dirname(__file__)
+
+DEBUG = bool(os.getenv('DJANGO_DEBUG', False))
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
