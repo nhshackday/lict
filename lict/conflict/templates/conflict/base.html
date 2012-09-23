@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+{% load url from future %}
+<html>
+    <head>
+        <title>Conflict</title>
+        <link rel="stylesheet" href="//current.bootstrapcdn.com/bootstrap-v204/css/bootstrap-combined.min.css" />
+        <style>
+            body {
+                padding-top: 50px;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- u:{{ user.username }} -->
+        <header class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="brand" href="{% url "home" %}">Conflict</a>
+                    <ul class="nav">
+                        <li>
+                            <a href="{% url "organisations" %}">Organisations</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+        {% block content %}
+        {% endblock %}
+        <footer class="container">
+            <hr />
+            <p>
+                <a href="https://github.com/nhshackday/lict">https://github.com/nhshackday/lict</a>
+            </p>
+        </footer>
+        <script src="//current.bootstrapcdn.com/bootstrap-v204/js/bootstrap.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js"></script>
+    </body>
+</html>
