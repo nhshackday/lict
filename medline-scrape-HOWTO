@@ -1,0 +1,25 @@
+
+./extract_ids.py `seq -w 00 9` > /mnt/nhshackday/je4d/medline-scrape/pubmed-ids-0&
+./extract_ids.py `seq -w 10 19` > /mnt/nhshackday/je4d/medline-scrape/pubmed-ids-1&
+p=2
+./extract_ids.py `seq -w $p""0 $p""9` > /mnt/nhshackday/je4d/medline-scrape/pubmed-ids-$p &
+p=3
+./extract_ids.py `seq -w $p""0 $p""9` > /mnt/nhshackday/je4d/medline-scrape/pubmed-ids-$p &
+p=4
+./extract_ids.py `seq -w $p""0 $p""9` > /mnt/nhshackday/je4d/medline-scrape/pubmed-ids-$p &
+p=5
+./extract_ids.py `seq -w $p""0 $p""9` > /mnt/nhshackday/je4d/medline-scrape/pubmed-ids-$p &
+p=6
+./extract_ids.py `seq -w $p""0 $p""9` > /mnt/nhshackday/je4d/medline-scrape/pubmed-ids-$p &
+p=7
+./extract_ids.py `seq -w $p""0 $p""9` > /mnt/nhshackday/je4d/medline-scrape/pubmed-ids-$p &
+p=8
+./extract_ids.py `seq -w $p""0 $p""9` > /mnt/nhshackday/je4d/medline-scrape/pubmed-ids-$p &
+p=9
+./extract_ids.py `seq -w $p""0 $p""9` > /mnt/nhshackday/je4d/medline-scrape/pubmed-ids-$p &
+
+
+for i in `seq 0 9`; do for j in `seq -w 0 99`; do grep "$i$j"'$' ids-100/pubmed-ids-$j > ids-1000/pubmed-ids-$i$j; done ;done
+for i in `seq 0 9`; do for j in `seq 0 9`; do grep "$i$j"'$' pubmed-ids-$i > ids-100/pubmed-ids-$i$j; done ;done
+
+for i in  /mnt/nhshackday/je4d/medline-scrape/ids-1000/pubmed-ids-*; do ./medline_fetch.py $i & done
