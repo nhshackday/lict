@@ -1,0 +1,23 @@
+{% extends "conflict/base.html" %}
+
+{% block content %}
+    <section class="container">
+        <h2>Conflicts</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Article</th>
+                    <th>Organisation</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for conflict in conflict_list %}
+                    <tr>
+                        <td>{{ conflict.article.title }}</td>
+                        <td>{{ conflict.organisation.name }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+{% endblock %}

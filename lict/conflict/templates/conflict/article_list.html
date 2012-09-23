@@ -1,0 +1,65 @@
+{% extends "conflict/base.html" %}
+
+{% block content %}
+    <section class="container">
+        <h2>Articles</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>PMC</th>
+                    <th>PMID</th>
+                    <th>Title</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for article in article_list %}
+                    <tr>
+                        <td>{{ article.pmc }}</td>
+                        <td>{{ article.pmid }}</td>
+                        <td>{{ article.title }}</td>
+                        <td>
+                            <ul>
+                                {% for conflict in article.conflict_set.all %}
+                                    <li>{{ conflict.organisation.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            {% if is_paginated %}
+                <tfoot>
+                    <tr>
+                        <td colspan="2">
+                            <ul class="pagination">
+                                {% if page_obj.has_previous %}
+                                <li>
+                                    <a href="?page={{ page_obj.previous_page_number }}">Prev</a>
+                                </li>
+                                {% else %}
+                                <li class="disabled">
+                                    <a>Prev</a>
+                                </li>
+                                {% endif %}
+                                {% comment %}
+                                            <span class="page-current">
+                                                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                                            </span>
+                                {% endcomment %}
+                                {% if page_obj.has_next %}
+                                <li>
+                                    <a href="?page={{ page_obj.next_page_number }}">Next</a>
+                                </li>
+                                {% else %}
+                                <li class="disabled">
+                                    <a>Next</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </td>
+                    </tr>
+                </tfoot>
+            {% endif %}
+        </table>
+    </section>
+{% endblock %}
