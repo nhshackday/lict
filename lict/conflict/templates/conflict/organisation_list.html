@@ -13,7 +13,9 @@
             <tbody>
                 {% for organisation in organisation_list %}
                     <tr>
-                        <td>{{ organisation.name }}</td>
+                        <td>
+                            <a href="{{ organisation.get_absolute_url }}">{{ organisation.name }}</a>
+                        </td>
                         <td>
                             <ul>
                                 {% for conflict in organisation.conflict_set.all %}
@@ -24,6 +26,39 @@
                     </tr>
                 {% endfor %}
             </tbody>
+            {% if is_paginated %}
+                <tfoot>
+                    <tr>
+                        <td colspan="2">
+                            <ul class="pagination">
+                                {% if page_obj.has_previous %}
+                                    <li>
+                                        <a href="?page={{ page_obj.previous_page_number }}">Prev</a>
+                                    </li>
+                                {% else %}
+                                    <li class="disabled">
+                                        <a>Prev</a>
+                                    </li>
+                                {% endif %}
+                                {% comment %}
+                                    <span class="page-current">
+                                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                                    </span>
+                                {% endcomment %}
+                                {% if page_obj.has_next %}
+                                    <li>
+                                        <a href="?page={{ page_obj.next_page_number }}">Next</a>
+                                    </li>
+                                {% else %}
+                                    <li class="disabled">
+                                        <a>Next</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </td>
+                    </tr>
+                </tfoot>
+            {% endif %}
         </table>
     </section>
 {% endblock %}

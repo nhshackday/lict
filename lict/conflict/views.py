@@ -10,9 +10,11 @@ def home(request):
 
 class OrganisationListView(ListView):
     model = Organisation
+    paginate_by = 10
 
 class ArticleListView(ListView):
     model = Article
+    paginate_by = 10
 
 class ConflictListView(ListView):
     model = Conflict
