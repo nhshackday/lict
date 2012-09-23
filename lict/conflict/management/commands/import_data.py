@@ -39,7 +39,7 @@ class Command(BaseCommand):
                             logging.info("Created organisation %s" % organisation_name)
                         (conflict, _) = Conflict.objects.get_or_create(article=article, organisation=organisation)
 
-            except AssertionError as e:
+            except UnicodeEncodeError as e:
                 # When in doubt, wrap it all in a massive try/except for bonus insanity!
                 logging.error(e)
 
