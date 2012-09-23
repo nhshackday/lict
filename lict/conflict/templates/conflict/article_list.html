@@ -17,6 +17,13 @@
                         <td>{{ article.pmc }}</td>
                         <td>{{ article.pmid }}</td>
                         <td>{{ article.title }}</td>
+                        <td>
+                            <ul>
+                                {% for conflict in article.conflict_set.all %}
+                                    <li>{{ conflict.organisation.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
