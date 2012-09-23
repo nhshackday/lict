@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.conf import settings
 from django.shortcuts import render
+from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from conflict.models import Organisation, Article, Conflict
 
@@ -15,3 +16,6 @@ class ArticleListView(ListView):
 
 class ConflictListView(ListView):
     model = Conflict
+
+class OrganisationDetailView(DetailView):
+    model = Organisation
