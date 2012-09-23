@@ -10,7 +10,7 @@ COMPETING_INTEREST_TITLES=["competing interests", "declaration of competing inte
 
 def ci_info_list(doc):
     ci_info = []
-    ci_info += [pq(s)('p').text().encode('utf-8') for s in doc('sec') if pq(s)('title').text().encode('utf-8').strip().lower() in COMPETING_INTEREST_TITLES]
+    ci_info += [pq(s)('p').text().encode('utf-8') for s in doc('sec') if pq(s)('title') and pq(s)('title').text().encode('utf-8').strip().lower() in COMPETING_INTEREST_TITLES]
     ci_info += [' '.join(p.itertext()) for p in doc('p') if pq(p)('bold') and pq(p)('bold').text().encode('utf-8').strip().lower() in  COMPETING_INTEREST_TITLES]
     return ci_info
 
