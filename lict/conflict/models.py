@@ -12,3 +12,7 @@ class Organisation(models.Model):
 class Conflict(models.Model):
     article = models.ForeignKey(Article)
     organisation = models.ForeignKey(Organisation)
+
+class Drug(models.Model):
+    jeff_id = models.IntegerField()
+    name = models.CharField(max_length=500)
