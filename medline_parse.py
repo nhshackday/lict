@@ -6,6 +6,7 @@ gdb = GraphDatabase(NEO4J_URL)
 one_index_to_rule_them_all = gdb.nodes.indexes.create("one_index_to_rule_them_all")
 
 datadir = ffs.Path(__file__).parent.abspath + 'medline/data'
+datadir = "/mnt/nhshackday/je4d/medline-scrape/data"
 
 def save_medline_to_neo4j(medliner):
     try:

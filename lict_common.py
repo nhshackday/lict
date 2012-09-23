@@ -15,10 +15,13 @@ def xmldocs_in_dir(d):
 
 def filter_by_article_type(atype, docs):
     for filename, doc in docs:
-        article_tag = doc('article')
-        article_type = article_tag.attr('article-type')
-        if article_type == atype:
-            yield filename, doc
+        try:
+            article_tag = doc('article')
+            article_type = article_tag.attr('article-type')
+            if article_type == atype:
+                yield filename, doc
+        except:
+            pass
 
 def pubmed_ids(doc):
     pmc = None

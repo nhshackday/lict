@@ -1,3 +1,5 @@
+#!/opt/nhshackday/wip/lict/bin/python
+# vim: set sw=4 sts=4 ts=4 et:
 import csv, urllib,urllib2
 import lxml.html
 import os, sys
@@ -85,6 +87,7 @@ params = {"EntrezSystem2.PEntrez.Pubmed.Pubmed_SearchBar.SearchResourceList":"pu
 "EntrezSystem2.PEntrez.DbConnector.TabCmd":"",
 "EntrezSystem2.PEntrez.DbConnector.QueryKey":"",}
 
+data_dir="/mnt/nhshackday/je4d/medline-scrape"
 
 def fetch_id(id):
     params['EntrezSystem2.PEntrez.DbConnector.IdsFromResult'] = str(id)
@@ -100,16 +103,24 @@ if __name__ == '__main__':
         sys.exit(0)
     # No buffering thanks
     sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
-    print 'Loading %s' % sys.argv[1]
+    print 'Loading %s\n' % sys.argv[1]
     reader = csv.reader(open(sys.argv[1]))
     for row in reader:
         id = row[0]
-        if  not id or os.path.exists("data/%s.medline" % id):
-            print 'Skipping ID %s\r' %  id,
+        id_dir = id[-2:]
+        if  ((not id)
+                or os.path.exists(os.path.join(data_dir, "data/done/%s.medline" % id))
+                or os.path.exists(os.path.join(data_dir, "data/done/%s/%s.medline" % (id_dir, id)))
+                or os.path.exists(os.path.join(data_dir, "data/todo/%s/%s.medline" % (id_dir, id)))):
+            print 'Skipping ID %s\n' %  id,
             continue
-        print 'Loading ID %s\r' %  id,
-        data = fetch_id(id)
+        print 'Loading ID %s\n' %  id,
+        data = None
+        try:
+            data = fetch_id(id)
+        except:
+            continue
         page = lxml.html.fromstring(data)
         content = page.cssselect('pre')[0].text_content()
-        open("data/%s.medline" % id,"wb").write(content.strip())
+        open(os.path.join(data_dir, "data/todo/%s/%s.medline" % (id_dir, id)),"wb").write(content.strip())
 
