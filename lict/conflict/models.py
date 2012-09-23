@@ -16,3 +16,14 @@ class Conflict(models.Model):
 class Drug(models.Model):
     jeff_id = models.IntegerField()
     name = models.CharField(max_length=500)
+
+class ArticleDrugs(models.Model):
+    article = models.ForeignKey(Article)
+    drug = models.ForeignKey(Drug)
+
+class Mesh(models.Model):
+    """
+    What's a Mesh???
+    """
+    jeff_id = models.IntegerField()
+    name = models.CharField(max_length=500)
