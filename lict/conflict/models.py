@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import permalink
 
 class Article(models.Model):
     pmc = models.IntegerField(null=True)
@@ -8,6 +9,10 @@ class Article(models.Model):
 
 class Organisation(models.Model):
     name = models.CharField(max_length=250)
+
+    @permalink
+    def get_absolute_url(self):
+        return ('organisation', [str(self.id)])
 
 class Conflict(models.Model):
     article = models.ForeignKey(Article)
