@@ -66,7 +66,8 @@ def handle_conflicts(node):
         organisation_index.add('name', organisation, org_node)
 
         # Relation-up
-        node.relationships.create('conflicts', org_node)
+        rel = node.relationships.create('conflicts', org_node)
+        rel['source'] = conflict_raw
 
 if __name__ == "__main__":
     import sys
