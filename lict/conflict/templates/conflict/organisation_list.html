@@ -2,12 +2,28 @@
 
 {% block content %}
     <section class="container">
-        <table>
-            {% for organisation in organisation_list %}
+        <h2>Organisations</h2>
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>{{ organisation.name }}</td>
+                    <th>Organisation</th>
+                    <th>Articles</th>
                 </tr>
-            {% endfor %}
+            </thead>
+            <tbody>
+                {% for organisation in organisation_list %}
+                    <tr>
+                        <td>{{ organisation.name }}</td>
+                        <td>
+                            <ul>
+                                {% for conflict in organisation.conflict_set.all %}
+                                    <li>{{ conflict.article.title}}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
     </section>
 {% endblock %}
