@@ -1,6 +1,5 @@
-# Django settings for lict project.
-
 import os
+
 PROJECT_DIR = os.path.dirname(__file__)
 
 DEBUG = bool(os.getenv('DJANGO_DEBUG', False))
@@ -114,6 +113,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'conflict',
 )
 
 # A sample logging configuration. The only tangible logging
