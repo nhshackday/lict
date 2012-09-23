@@ -1,0 +1,9 @@
+Running drug_mapping:
+seq -w 0 99 | nice -n 10 ionice -c 3  xargs -n1 -P 5 ./run_drugmap.sh
+
+Running medline_fetch
+for i in  /mnt/nhshackday/je4d/medline-scrape/ids-1000/pubmed-ids-*; do ./medline_fetch.py $i & done
+
+Running mesh_mapping:
+for i in `seq -w 0 99`; do ./mesh_mapping.py /mnt/nhshackday/je4d/medline-scrape/data/todo/$i > /mnt/nhshackday/je4d/pmid-to-mesh-id-$i & done
+
