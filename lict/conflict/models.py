@@ -9,6 +9,7 @@ class Article(models.Model):
 
 class Organisation(models.Model):
     name = models.CharField(max_length=250)
+    is_a_real_organisation = models.BooleanField(default=True)
 
     @permalink
     def get_absolute_url(self):
