@@ -5,7 +5,7 @@ from conflict.models import Article, Organisation, Conflict
 class Command(BaseCommand):
     def handle(self, *args, **options):
         logging.basicConfig()
-        logging.getLogger().setLevel(logging.DEBUG)
+        logging.getLogger().setLevel(logging.INFO)
 
 
         file_list = args
@@ -18,7 +18,7 @@ class Command(BaseCommand):
                     logging.debug("Skipping article of type %s" % article_type)
                     continue
                 (pmid, pmc) = pubmed_ids(article_doc)
-                logging.info("Processing article %s / %s" % (pmc, pmid))
+                logging.info("Processing article with pmc %s / pmid %s" % (pmc, pmid))
                 # Which key? PMC
 
                 (article,_) = Article.objects.get_or_create(pmid=pmid)
