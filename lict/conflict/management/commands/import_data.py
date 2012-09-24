@@ -32,6 +32,7 @@ class Command(BaseCommand):
                     article.raw_conflict_text = ' '.join(conflict_raw)
                     logging.info("Found conflict text for %d: %s" % (pmc, article.raw_conflict_text))
                     organisation_names = nltk_hackery.extract_orgs(article.raw_conflict_text)
+                    logging.info("Extracted conflict organisations: %s" % str(organisation_names))
 
                     for organisation_name in organisation_names:
                         (organisation, organisation_created) = Organisation.objects.get_or_create(name=organisation_name)
