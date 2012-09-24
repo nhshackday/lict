@@ -18,3 +18,23 @@ It also might integrate with www.openbnf.org and www.burningyourmoney.org :-)
 Conflict of interestz!
 
 http://wiki.nhshackday.com/wiki/Conflict%20of%20interest
+
+## Getting Started
+
+### Get the code
+
+```bash
+$ git clone https://github.com/nhshackday/lict
+$ cd lict
+$ virtualenv $WHERE_YOU_LIKE_TO_KEEP_VIRTUALENVS/lict
+$ . $WHERE_YOU_LIKE_TO_KEEP_VIRTUALENVS/lict/bin/activate
+$ pip install -r requirements.txt
+```
+
+### Sort out your data
+
+```bash
+$ python lict/manage.py syncdb --noinput
+$ python lict/manage.py migrate
+$ #TODO Integrate instructions from pubmed-download-HOWTO / medline-scrape-HOWTO
+```
