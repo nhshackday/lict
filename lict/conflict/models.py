@@ -7,9 +7,18 @@ class Article(models.Model):
     title = models.CharField(max_length=250)
     raw_conflict_text = models.TextField()
 
+
+class RealOrganisationManager(models.Manager):
+    def get_query_set(self):
+        return super(RealOrganisationManager, self).get_query_set().filter(is_a_real_organisation=True)
+
+
 class Organisation(models.Model):
     name = models.CharField(max_length=250)
     is_a_real_organisation = models.BooleanField(default=True)
+
+    objects = models.Manager()
+    real_organisations = RealOrganisationManager()
 
     @permalink
     def get_absolute_url(self):

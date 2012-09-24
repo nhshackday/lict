@@ -13,7 +13,7 @@ class OrganisationListView(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return Organisation.objects.annotate(conflict_count=Count('conflict')).order_by('-conflict_count')
+        return Organisation.real_organisations.annotate(conflict_count=Count('conflict')).order_by('-conflict_count')
 
 class ArticleListView(ListView):
     model = Article
