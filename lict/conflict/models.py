@@ -24,6 +24,10 @@ class Organisation(models.Model):
     def get_absolute_url(self):
         return ('organisation', [str(self.id)])
 
+    def __unicode__(self):
+        return self.name
+
+
 class Conflict(models.Model):
     article = models.ForeignKey(Article)
     organisation = models.ForeignKey(Organisation)

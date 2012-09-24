@@ -1,7 +1,10 @@
 # -*- coding: UTF-8 -*-
-from django.conf.urls import patterns, url
+from django.conf.urls import patterns, url, include
 from conflict.views import OrganisationListView, ArticleListView, ConflictListView, OrganisationDetailView
 from django.http import HttpResponse
+from django.contrib import admin
+
+admin.autodiscover()
 
 urlpatterns = patterns('conflict.views',
     url(r'^robots\.txt', lambda r: HttpResponse('User-agent: *\nDisallow: /', mimetype='text/plain')),
@@ -11,4 +14,5 @@ urlpatterns = patterns('conflict.views',
     url(r'^organisations/(?P<pk>\d+)/$', OrganisationDetailView.as_view(), name='organisation'),
     url(r'^articles/$', ArticleListView.as_view(), name='articles'),
     url(r'^conflicts/$', ConflictListView.as_view(), name='conflicts'),
+    url(r'^admin/', include(admin.site.urls)),
 )
