@@ -12,7 +12,8 @@ ADMINS = (
 MANAGERS = ADMINS
 
 import dj_database_url
-DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
+DEFAULT_DB_URL = 'sqlite:///%s/lict.sqlite3' % PROJECT_DIR # Ew...
+DATABASES = {'default': dj_database_url.config(default=DEFAULT_DB_URL)}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
