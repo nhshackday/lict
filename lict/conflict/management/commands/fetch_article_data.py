@@ -18,13 +18,16 @@ class Command(BaseCommand):
         tmpdir = tempfile.mkdtemp('-conflict')
 
         # TODO Options...
-        START_PMCID = 13900
-        STOP_PMCID = 13924
+        START_PMCID = 1262700
+        STOP_PMCID = START_PMCID + 250
 
         for pmcid in xrange(START_PMCID, STOP_PMCID):
             filename = '%d.nxml' % pmcid
             url = urljoin(BASE_URL, filename)
             r = requests.get(url)
+            if r.status_code != requests.codes.ok:
+                logging.debug("Got HTTP %s when downloading %s, skipping..." % (r.status_code, filename))
+                continue
             with open(os.path.join(tmpdir, filename), 'w') as f:
                 f.write(r.text)
             logging.debug("Wrote %s" % filename)
