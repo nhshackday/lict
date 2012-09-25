@@ -18,9 +18,13 @@
                         </td>
                         <td>
                             <ul>
-                                {% for conflict in organisation.conflict_set.all %}
+                                {# TODO Pull the 10 into a variable! (Complicated slightly by |slice) #}
+                                {% for conflict in organisation.conflict_set.all|slice:":10" %}
                                     <li>{{ conflict.article.title}}</li>
                                 {% endfor %}
+                                {% if organisation.conflict_set.count > 10 %}
+                                    <a href="{{ organisation.get_absolute_url }}">...and {{ organisation.conflict_set.count|add:"-10" }} more!</a>
+                                {% endif %}
                             </ul>
                         </td>
                     </tr>
