@@ -17,6 +17,11 @@ if __name__ == "__main__":
     druglist = drugs.druglist()
     for dirname, dirnames, filenames in os.walk(sys.argv[1]):
         for fn in map(lambda x: os.path.join(dirname, x), filter(lambda f:f.endswith(".nxml"), filenames)):
+            """
+            For each article.nxml, search it for each drugname in the drug list,
+            and print a CSV line of "pmc_id,drug_id,drug_id,..." if any drugs
+            were found
+            """
             pmc = re.sub(".*/", "", fn.replace(".nxml",""))
 
             f = open(fn, 'r')
