@@ -14,5 +14,6 @@ urlpatterns = patterns('conflict.views',
     url(r'^organisations/(?P<pk>\d+)/$', OrganisationDetailView.as_view(), name='organisation'),
     url(r'^articles/$', ArticleListView.as_view(), name='articles'),
     url(r'^conflicts/$', ConflictListView.as_view(), name='conflicts'),
+    url(r'^stats/$', 'stats', name='stats'),
     url(r'^admin/', include(admin.site.urls)),
 )

@@ -9,6 +9,14 @@ from conflict.models import Organisation, Article, Conflict
 def home(request):
     return render(request, "conflict/home.html")
 
+def stats(request):
+    context = {}
+    context['organisation_count'] = Organisation.objects.count()
+    context['real_organisation_count'] = Organisation.real_organisations.count()
+    context['article_count'] = Article.objects.count()
+    return render(request, 'conflict/stats.html', context)
+
+
 class OrganisationListView(ListView):
     paginate_by = 10
 

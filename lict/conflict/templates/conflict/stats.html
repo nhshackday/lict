@@ -1,0 +1,23 @@
+{% extends "conflict/base.html" %}
+
+{% block content %}
+    <section class="container">
+        <h2>Stats</h2>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Organisations</th>
+                    <td>{{ organisation_count }}</td>
+                </tr>
+                <tr>
+                    <th>Real Organisations</th>
+                    <td>{{ real_organisation_count }}</td>
+                </tr>
+                <tr>
+                    <th>Articles</th>
+                    <td>{{ article_count }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+{% endblock %}
