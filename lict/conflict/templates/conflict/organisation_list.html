@@ -14,7 +14,7 @@
                 {% for organisation in organisation_list %}
                     <tr>
                         <td>
-                            <a href="{{ organisation.get_absolute_url }}">{{ organisation.name }}</a>
+                            <a href="{{ organisation.get_absolute_url }}">{{ organisation.name }} ({{ organisation.conflict_set.count }})</a>
                         </td>
                         <td>
                             <ul>
