@@ -24,7 +24,7 @@ class Command(BaseCommand):
                 (article,_) = Article.objects.get_or_create(pmid=pmid)
                 article.pmc = pmc
                 article.pmid = pmid
-                article.title = article_doc('article-title').text()[:200]
+                article.title = article_doc('article-meta article-title').text()[:200]
                 article.save()
 
                 conflict_raw = extract_ci.ci_info_list(article_doc)
