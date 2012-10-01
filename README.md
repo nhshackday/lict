@@ -31,6 +31,12 @@ $ . $WHERE_YOU_LIKE_TO_KEEP_VIRTUALENVS/lict/bin/activate
 $ pip install -r requirements.txt
 ```
 
+### Get the NLTK dependencies
+
+```bash
+$ python -m nltk.downloader maxent_treebank_pos_tagger words maxent_ne_chunker
+```
+
 ### Sort out your data
 
 ```bash
