@@ -1,6 +1,13 @@
 # -*- coding: UTF-8 -*-
 from django.core.management.base import BaseCommand
 from conflict.models import Article, Organisation, Conflict
+from pyquery import PyQuery as pq
+from lict.lib.lict_common import pubmed_ids
+import logging
+from lict.lib import extract_ci, nltk_hackery
+
+DESIRED_ARTICLE_TYPE="research-article"
+
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
@@ -43,57 +50,3 @@ class Command(BaseCommand):
             except UnicodeEncodeError as e:
                 # When in doubt, wrap it all in a massive try/except for bonus insanity!
                 logging.error(e)
-
-
-
-####
-
-
-from pyquery import PyQuery as pq
-from lict.lib.lict_common import pubmed_ids
-import logging
-from lict.lib import extract_ci, nltk_hackery
-
-DESIRED_ARTICLE_TYPE="research-article"
-
-def import_stuff(file_list):
-    for filename in file_list:
-        article_doc = pq(filename=filename)
-        try:
-            article_tag = article_doc('article')
-            article_type = article_tag.attr('article-type')
-            if article_type != DESIRED_ARTICLE_TYPE:
-                logging.debug("Skipping article of type %s" % article_type)
-                continue
-            (pmid, pmc) = pubmed_ids(article_doc)
-            logging.info("Processing article %s / %s" % (pmc, pmid))
-            save_article_to_neo4j(article_doc)
-        except AssertionError as e:
-            # When in doubt, wrap it all in a massive try/except for bonus insanity!
-            logging.error(e)
-
-def save_article_to_neo4j(article_doc):
-    # Which key? PMC
-    (pmid, pmc) = pubmed_ids(article_doc)
-    pmc_str = str(pmc)
-    pmid_str = str(pmid)
-    try:
-        node = article_index.get('pmc', pmc_str)[0]
-    except IndexError:
-        node = gdb.node()
-
-    node['type'] = 'article'
-    node['pmc'] = pmc
-    node['pmid'] = pmid
-    node['title'] = article_doc('article-title').text()
-    conflict_raw = extract_ci.ci_info_list(article_doc)
-    if conflict_raw:
-        logging.debug("Found conflict text for %d" % pmc)
-        node['conflict_raw'] = ' '.join(conflict_raw)
-        handle_conflicts(node)
-
-    article_index.add('pmc', pmc_str, node)
-    article_index.add('pmid', pmid_str, node)
-
-
-
