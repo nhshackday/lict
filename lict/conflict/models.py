@@ -7,6 +7,9 @@ class Article(models.Model):
     title = models.CharField(max_length=250)
     raw_conflict_text = models.TextField()
 
+    def __unicode__(self):
+        return u'(pmc=%d,pmid=%d)' % (self.pmc, self.pmid)
+
 
 class RealOrganisationManager(models.Manager):
     def get_query_set(self):
@@ -31,6 +34,9 @@ class Organisation(models.Model):
 class Conflict(models.Model):
     article = models.ForeignKey(Article)
     organisation = models.ForeignKey(Organisation)
+
+    def __unicode__(self):
+        return u'(%s - %s)' % (self.article, self.organisation)
 
 class Drug(models.Model):
     jeff_id = models.IntegerField()
