@@ -1,10 +1,17 @@
 Django==1.4.1
 PyYAML==3.10
 South==0.7.6
+amqplib==1.0.2
+anyjson==0.3.3
+billiard==2.7.3.17
+celery==3.0.11
 cssselect==0.7.1
 dj-database-url==0.2.1
+django-celery==3.0.10
+django-celery-with-redis==3.0
 gunicorn==0.14.6
 httplib2==0.7.6
+kombu==2.4.7
 lucene-querybuilder==0.1.5
 lxml==3.0alpha2
 neo4jrestclient==1.7.0
@@ -12,5 +19,7 @@ nltk==2.0.2
 numpy==1.6.2
 psycopg2==2.4.5
 pyquery==1.2.1
+python-dateutil==1.5
+redis==2.6.2
 requests==0.14.0
 wsgiref==0.1.2

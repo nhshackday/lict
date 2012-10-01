@@ -113,6 +113,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'gunicorn',
     'south',
+    'djcelery',
     'conflict',
 )
 
@@ -144,3 +145,13 @@ LOGGING = {
         },
     }
 }
+
+import djcelery
+djcelery.setup_loader()
+
+if 'REDIS_URL' in os.environ:
+    CELERY_REDIS_BROKER_DB = 0 #TODO Rename this?
+    BROKER_URL = "%s%d" % (os.environ['REDIS_URL'], CELERY_REDIS_BROKER_DB)
+else:
+    INSTALLED_APPS += ('kombu.transport.django',)
+    BROKER_URL = 'django://'
