@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 import logging
-
+from celery import task
 from pyquery import PyQuery as pq
 from lict.lib.lict_common import pubmed_ids
 from conflict.models import Article, Organisation, Conflict
@@ -8,6 +8,7 @@ from lict.lib import extract_ci, nltk_hackery
 
 DESIRED_ARTICLE_TYPE="research-article"
 
+@task(ignore_result=True)
 def import_article(filename=None):
     article_doc = pq(filename=filename)
     article_tag = article_doc('article')

@@ -149,6 +149,11 @@ LOGGING = {
 import djcelery
 djcelery.setup_loader()
 
+CELERYD_HIJACK_ROOT_LOGGER = False
+CELERY_IMPORTS = (
+    'conflict.jobs.article',
+)
+
 if 'REDIS_URL' in os.environ:
     CELERY_REDIS_BROKER_DB = 0 #TODO Rename this?
     BROKER_URL = "%s%d" % (os.environ['REDIS_URL'], CELERY_REDIS_BROKER_DB)
